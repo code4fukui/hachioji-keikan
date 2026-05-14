@@ -27,3 +27,7 @@ yarn-error.log*
 
 /src/images/*
 !/src/images/.keep
+
+# auto-added by meta-ops
+node_modules/
+Thumbs.db
