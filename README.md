@@ -1,108 +1,94 @@
-# 市区町村ハザードマップテンプレート
+# Hachioji Landscape Resources Map (hachioji-keikan)
 
-市区町村の Web ハザードマップを作成するためのテンプレート。
+> 日本語のREADMEはこちらです: [README.ja.md](README.ja.md)
 
-[Tokyo OSS Party!! 2021](https://tokyo-oss.connpass.com/event/229199/) の成果物です（[発表資料](https://speakerdeck.com/sankichi92/shikuchoson-hazardmap-template)）。
+This repository is a template for creating interactive, web-based municipal maps. It is demonstrated here as a "Regional Landscape Resources Map" for Hachioji City, Tokyo, but can be adapted for various purposes, including hazard maps.
 
-- [利用例は Wiki へ](https://github.com/sankichi92/shikuchoson-hazardmap-template/wiki)
-- [質問は Discussions へ](https://github.com/sankichi92/shikuchoson-hazardmap-template/discussions)
+**Live Demo:** [https://sankichi92.github.io/hachioji-keikan/](https://sankichi92.github.io/hachioji-keikan/)
 
-## 背景と課題
 
-日本のハザードマップは、国土交通省の管理する[ハザードマップポータルサイト](https://disaportal.gsi.go.jp/)にまとめられており、そこでは以下の2つのサービスが提供されています。
+![A screenshot of the hachioji-keikan map application, showing a map of Hachioji city with colored markers indicating points of interest. A layer control panel is visible in the top-right, and a series of image cards with titles are displayed in a collapsible panel in the bottom-left.](https://user-images.githubusercontent.com/873336/163695254-83959954-215c-4861-9878-3806a6442654.png)
 
-- 重ねるハザードマップ: 災害リスク情報や防災に役立つ情報を、全国どこでも重ねて閲覧できるWeb地図サイト
-- わがまちハザードマップ: 市町村が作成したハザードマップを見つけやすくまとめたリンク集
 
-「重ねるハザードマップ」は Web 地図として多機能で非常によく作りこまれていますが、その[使い方](https://disaportal.gsi.go.jp/hazardmap/pamphlet/pamphlet.html)でも
+## Features
 
-> 詳細を確認する場合は市町村が作成したハザードマップをご覧ください。
+- **Easy Setup:** Create a new map instance by using this repository as a template.
+- **Custom Data Layers:** Automatically generate interactive map layers by adding CSV files with latitude and longitude data to the `/csv` directory.
+- **Image Display:** Showcase relevant photos in a collapsible panel on the map by adding image files to the `/images` directory.
+- **Configurable Tile Layers:** Add overlay tile layers, such as those from the national Hazard Map Portal, via a simple configuration file.
+- **Automated Deployment:** A pre-configured GitHub Action builds and deploys the map to GitHub Pages on every push to the `main` branch.
+- **Modern Tech Stack:** Built with React, Leaflet, and TypeScript.
 
-とあるとおり、あくまで国の作成した地図であり、市区町村ごとの詳細は確認できません。
+## How It Works
 
-ハザードマップに求められるのは、多くの場合、国全体の広く浅い情報ではなく、自身の住む場所ピンポイントの狭く深い情報です。
-そうした情報を確認するには、「わがまちハザードマップ」から市区町村のハザードマップを確認する必要があります。
+The project uses a set of Node.js scripts at build time to prepare data for the React application:
+1.  `hazardmap-config.jsonc` is parsed into a standard JSON file.
+2.  The municipal boundary GeoJSON is fetched from the [Shikuchoson Boundaries](https://shikuchoson-boundaries.sankichi.app/) API based on the configured prefecture and city name.
+3.  All `.csv` files in the `/csv` directory are converted into a single GeoJSON file.
+4.  All images in the `/images` directory are copied into the source tree to be bundled with the application.
 
-しかし、市区町村の作成するハザードマップの多くが紙での配布を前提としており、重ねるハザードマップとちがって Web に最適化されていません。
-そしておそらく、独自の Web ハザードマップを開発・運用できるほど、予算やリソースに余裕のある市区町村は少ないでしょう。
+This data is then loaded into the React application to render the map, layers, and UI components.
 
-この課題に対し、本プロジェクトは、市区町村の単位で Web ハザードマップを容易に作成・カスタマイズできるテンプレートを提供します。
+## Getting Started
 
----
+1.  **Create a new repository:** Click the "Use this template" button at the top of this page.
+2.  **Clone your new repository:**
+    ```bash
+    git clone https://github.com/your-username/your-repository-name.git
+    cd your-repository-name
+    ```
+3.  **Install dependencies:**
+    ```bash
+    npm install
+    ```
+4.  **Run the development server:**
+    ```bash
+    npm start
+    ```
+    This will start a local server and open the map in your browser.
 
-関連: [34テラバイトのデータと格闘して「全国ハザードマップ」を公開した理由 - NHK](https://www3.nhk.or.jp/news/special/saigai/select-news/20220621_01.html)
+## Customization & Deployment
 
-## 使い方
+1.  **Configure the Municipality:**
+    -   Open `hazardmap-config.jsonc`.
+    -   Set the `prefecture` and `shikuchoson` fields to match your target municipality. This is used to fetch the correct map boundary.
 
-動画で見る: https://youtu.be/oc1CfaVSlno
+2.  **Add Custom Data Points:**
+    -   Create one or more `.csv` files in the `/csv` directory.
+    -   Each CSV must contain `lat` and `lon` columns for coordinates.
+    -   Any other columns (e.g., `name`, `description`) will be automatically displayed in the popup when a user clicks on a map marker.
 
-### ハザードマップの作成・公開
+3.  **Add Supporting Images:**
+    -   Place `.jpg`, `.png`, or other web-compatible image files in the `/images` directory.
+    -   The filename (without the extension) will be used as the image's title on the map.
 
-#### 1. テンプレートを使用して GitHub リポジトリを作成する
+4.  **Add Hazard Map Layers (Optional):**
+    -   In `hazardmap-config.jsonc`, add layer objects to the `tiles` array. You can find available data from the [Hazard Map Portal Site](https://disaportal.gsi.go.jp/hazardmap/copyright/opendata.html).
+    -   Example for a flood layer:
+        ```jsonc
+        "tiles": [
+          {
+            "name": "洪水浸水想定区域（想定最大規模）",
+            "url": "https://disaportal.gsi.go.jp/data/raster/01_flood_l2_shinsuisoutai_data/{z}/{x}/{y}.png",
+            "attribution": "<a href='https://disaportal.gsi.go.jp/hazardmap/copyright/opendata.html'>ハザードマップポータルサイト</a>",
+            "checked": true
+          }
+        ]
+        ```
 
-1. 上部（あるいはこちら）の「[Use this template](https://github.com/sankichi92/shikuchoson-hazardmap-template/generate)」ボタンを押す
-2. Repository name を入力（例: `hachioji-hazardmap`）し、「Create repository from template」ボタンを押す
-   - Repository name が次の手順で公開する Web ページの URL の一部になります
+5.  **Deploy:**
+    -   Commit and push your changes to the `main` branch.
+    -   The GitHub Action will automatically build and deploy the site.
+    -   In your repository settings, go to "Pages" and ensure the source is set to `gh-pages` branch and the `/ (root)` directory. Your map will be live at the provided URL.
 
-詳細: https://docs.github.com/ja/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template
+## Data Sources
 
-#### 2. `hazardmap-config.jsonc` を対象の市区町村向けに更新する
+This project utilizes the following open data sources and APIs:
 
-1. 作成したリポジトリの [`hazardmap-config.jsonc`](./hazardmap-config.jsonc) をクリックして開く
-2. ファイル右上の鉛筆✏️ボタンをクリックして編集画面を開く
-3. `prefecture` と `shikuchoson` の値をハザードマップを作成する都道府県・市区町村に変更して「Commit changes」ボタンを押す
-   - 合わせて、不要な `tiles` の要素（`{}` で囲まれる単位）も消してください。たとえば、内陸であれば「高潮浸水想定区域」は不要でしょう
+- **Base Map:** [GSI Japan Pale Tile](https://maps.gsi.go.jp/development/ichiran.html) by the Geospatial Information Authority of Japan.
+- **Boundary Data:** [Shikuchoson Boundaries](https://shikuchoson-boundaries.sankichi.app/) for municipal boundary GeoJSON.
+- **Hazard Data (Optional):** [Hazard Map Portal Site](https://disaportal.gsi.go.jp/) for official hazard map tile data.
 
-詳細: https://docs.github.com/ja/repositories/working-with-files/managing-files/editing-files#editing-files-in-your-repository
+## License
 
-#### 3. 作成したリポジトリの設定で GitHub Pages を有効化して Web ページを公開する
-
-1. 上部タブ「Settings」→サイドバー「Pages」から GitHub Pages の設定画面へ移動する
-2. Source に「`gh-pages`」を選択して「Save」ボタンを押す
-3. しばらくすると、GitHub Pages の設定画面に URL が表示され、ハザードマップがその URL で公開される
-
-詳細: https://docs.github.com/ja/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site
-
-### ハザードマップのカスタマイズ
-
-#### CSV ファイルをアップロードしてカスタムレイヤを追加する
-
-1. 作成したリポジトリの [`csv`](./csv) をクリックして内容を表示する
-2. 「Add files」→「Upload files」から CSV ファイルをアップロード、「Commit changes」ボタンを押す
-3. [`01-サンプル.csv`](./csv/01-サンプル.csv) を表示し、右上のゴミ箱🗑ボタンからファイルを削除する
-
-詳細: https://docs.github.com/ja/repositories/working-with-files/managing-files/adding-a-file-to-a-repository
-
-##### CSV のフォーマットについて
-
-CSV ファイルは必ず `name`（名前）、`lat`（緯度）、`lon`（経度）のカラム（列）を持つ必要があります。
-さらに、これらのカラム以外も追加でき、地図上のアイコンをクリックしたときに合わせて表示されます。
-また、ファイル名先頭の `01-` は地図上での表示順を決めるために使われ、数字自体は地図上に表示されません。
-
-[`01-サンプル.csv`](./csv/01-サンプル.csv) を参考にしてください。
-
-#### 画像をアップロードして地図の左下に表示する
-
-CSV 同様、[`images`](./images) 以下に画像をアップロードすれば、地図の左下に表示されるようになります。
-
-## 開発について
-
-このプロジェクトは [Create React App](https://github.com/facebook/create-react-app) で作成されています。
-
-### セットアップ
-
-事前に [Node.js](https://nodejs.org/) をインストールしてください。
-
-    $ git clone https://github.com/sankichi92/shikuchoson-hazardmap-template.git
-    $ cd shikuchoson-hazardmap-template
-    $ npm install
-
-### 開発用サーバを起動する
-
-    $ npm start
-
-上記を実行すると [http://localhost:3000](http://localhost:3000) で確認できます。
-
-### 本番向けのアプリケーションコードを `build` 以下に生成する
-
-    $ npm run build
+MIT License — see [LICENSE](LICENSE).
