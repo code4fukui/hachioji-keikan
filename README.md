@@ -4,7 +4,7 @@
 
 This repository is a template for creating interactive, web-based municipal maps. It is demonstrated here as a "Regional Landscape Resources Map" for Hachioji City, Tokyo, but can be adapted for various purposes, including hazard maps.
 
-**Live Demo:** [https://sankichi92.github.io/hachioji-keikan/](https://sankichi92.github.io/hachioji-keikan/)
+**Live Demo:** ~~https://sankichi92.github.io/hachioji-keikan/~~ *(unavailable)* *(demo unavailable)*
 
 
 ![A screenshot of the hachioji-keikan map application, showing a map of Hachioji city with colored markers indicating points of interest. A layer control panel is visible in the top-right, and a series of image cards with titles are displayed in a collapsible panel in the bottom-left.](https://user-images.githubusercontent.com/873336/163695254-83959954-215c-4861-9878-3806a6442654.png)

@@ -2,7 +2,7 @@
 
 このリポジトリは、インタラクティブなウェブベースの市区町村マップを作成するためのテンプレートです。ここでは東京都八王子市の「地域景観資源マップ」としてデモンストレーションを行っていますが、ハザードマップなどさまざまな目的に応用可能です。
 
-**ライブデモ:** [https://sankichi92.github.io/hachioji-keikan/](https://sankichi92.github.io/hachioji-keikan/)
+**ライブデモ:** ~~https://sankichi92.github.io/hachioji-keikan/~~ *(unavailable)* *(demo unavailable)*
 
 ![hachioji-keikanマップアプリケーションのスクリーンショット。八王子市の地図上に、関心のあるポイントを示す色付きのマーカーが表示されています。右上にはレイヤーコントロールパネルがあり、左下にはタイトル付きの画像カードが折りたたみ可能なパネルに表示されています。](https://user-images.githubusercontent.com/873336/163695254-83959954-215c-4861-9878-3806a6442654.png)
 
